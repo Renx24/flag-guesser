@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Key, useEffect, useState } from "react";
 
 const BASE_URL = "https://flagcdn.com/";
 
@@ -8,7 +8,7 @@ function App() {
   const [correctAnswer, setCorrectAnswer] = useState("");
   const [guessCount, setGuessCount] = useState(0);
   const [correctGuessCount, setCorrectGuessCount] = useState(0);
-  const [imgSrc, setImgSrc] = useState("https://flagcdn.com/w320/ua.svg");
+  const [imgSrc, setImgSrc] = useState("ua");
   const [userGuess, setUserGuess] = useState("");
 
   useEffect(() => {
@@ -16,12 +16,11 @@ function App() {
   }, []);
 
   const randomFlag = (obj) => {
-    let keys = Object.keys(obj);
-    let newFlag = Object.keys(obj)[Math.floor(Math.random() * keys.length)];
-    setCorrectAnswer(obj[newFlag]);
+    let randomCCA2 = Object.keys(obj)[Math.floor(Math.random() * obj.length)]; // gives abbreviation of json rendered flag (ua, fr, br etc..)
+    setCorrectAnswer(obj[randomCCA2]["name"]["common"]); // set correct answer to common name of randomly selected flag
 
-    setImgSrc(`${BASE_URL}${newFlag}.svg`);
-    setAmountOfFlags(keys.length);
+    setImgSrc(`${BASE_URL}${obj[randomCCA2]["cca2"].toLowerCase()}.svg`);
+    setAmountOfFlags(obj.length);
   };
 
   const handleGuess = () => {
@@ -43,7 +42,7 @@ function App() {
 
   const fetchFlag = async () => {
     try {
-      const res = await fetch(`https://flagcdn.com/en/codes.json`);
+      const res = await fetch(`https://restcountries.com/v3.1/region/europe`);
       const data = await res.json();
       randomFlag(data);
     } catch (err) {
