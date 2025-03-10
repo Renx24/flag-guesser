@@ -1,6 +1,7 @@
 {
   "name": "flag-guesser",
   "private": true,
+  "homepage": "renx24.github.io/flag-guesser/",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -10,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "gh-pages": "^6.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
