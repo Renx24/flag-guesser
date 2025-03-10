@@ -14,6 +14,7 @@ function App() {
   const [allCountries, setAllCountries] = useState<string[]>([]);
   const [filteredCountries, setFilteredCountries] = useState<string[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(-1); // Tracks dropdown selection
+  const [boxShadowColor, setBoxShadowColor] = useState<string>("");
 
   useEffect(() => {
     fetchFlag();
@@ -43,6 +44,9 @@ function App() {
 
     if (userGuess.toLowerCase().trim() === correctAnswer.toLowerCase()) {
       setCorrectGuessCount((prev) => prev + 1);
+      setBoxShadowColor("0px 10px 30px green");
+    } else {
+      setBoxShadowColor("0px 10px 30px red");
     }
 
     setIsAnswerRevealed(true);
@@ -53,6 +57,7 @@ function App() {
     if (e.key === "Enter" && isAnswerRevealed) {
       setIsAnswerRevealed(false);
       setUserGuess("");
+      setBoxShadowColor("");
       setFilteredCountries([]); // Clear dropdown
       fetchFlag();
     }
@@ -136,7 +141,16 @@ function App() {
         <div className="count correct">{correctGuessCount}</div>
         <div className="count incorrect">{guessCount - correctGuessCount}</div>
       </div>
-      <img height="320" id="flag-img" src={imgSrc} alt="Flag" />
+      <img
+        height="320"
+        id="flag-img"
+        src={imgSrc}
+        alt="Flag"
+        style={{
+          boxShadow: boxShadowColor,
+          transition: "box-shadow 0.2s ease-in-out",
+        }}
+      />
       <p style={{ visibility: isAnswerRevealed ? "visible" : "hidden" }}>
         Correct answer: {correctAnswer}
       </p>
