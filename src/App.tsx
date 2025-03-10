@@ -1,4 +1,4 @@
-import { Key, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const BASE_URL = "https://flagcdn.com/";
 
@@ -10,17 +10,27 @@ function App() {
   const [correctGuessCount, setCorrectGuessCount] = useState(0);
   const [imgSrc, setImgSrc] = useState("ua");
   const [userGuess, setUserGuess] = useState("");
+  const [seenFlags, setSeenFlags] = useState(new Set());
 
   useEffect(() => {
     fetchFlag();
   }, []);
 
   const randomFlag = (obj) => {
-    let randomCCA2 = Object.keys(obj)[Math.floor(Math.random() * obj.length)]; // gives abbreviation of json rendered flag (ua, fr, br etc..)
-    setCorrectAnswer(obj[randomCCA2]["name"]["common"]); // set correct answer to common name of randomly selected flag
+    let keys = Object.keys(obj);
+    let availableFlags = keys.filter((key) => !seenFlags.has(key)); // Get only unseen flags
 
-    setImgSrc(`${BASE_URL}${obj[randomCCA2]["cca2"].toLowerCase()}.svg`);
-    setAmountOfFlags(obj.length);
+    if (availableFlags.length === 0) {
+      alert("Game Over! You've seen all flags.");
+      return;
+    }
+
+    let newFlag =
+      availableFlags[Math.floor(Math.random() * availableFlags.length)];
+
+    setImgSrc(`${BASE_URL}${newFlag}.svg`);
+    setCorrectAnswer(obj[newFlag]);
+    setSeenFlags((prev) => new Set([...prev, newFlag])); // Add flag to seen list
   };
 
   const handleGuess = () => {
@@ -42,9 +52,20 @@ function App() {
 
   const fetchFlag = async () => {
     try {
-      const res = await fetch(`https://restcountries.com/v3.1/region/europe`);
+      const res = await fetch("https://restcountries.com/v3.1/all"); // Fetch country data
       const data = await res.json();
-      randomFlag(data);
+
+      // Convert data into a flag-code-to-name mapping (only independent countries)
+      const countryFlags = {};
+      data.forEach((country) => {
+        if (country.independent) {
+          let flagCode = country.cca2.toLowerCase(); // Get country code (e.g., "us", "fr")
+          countryFlags[flagCode] = country.name.common; // Store name
+        }
+      });
+
+      setAmountOfFlags(Object.keys(countryFlags).length);
+      randomFlag(countryFlags);
     } catch (err) {
       console.error(err);
     }
