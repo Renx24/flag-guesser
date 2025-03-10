@@ -21,7 +21,9 @@ function App() {
     let availableFlags = keys.filter((key) => !seenFlags.has(key)); // Get only unseen flags
 
     if (availableFlags.length === 0) {
-      alert("Game Over! You've seen all flags.");
+      alert(
+        `Game Over! You've guessed all the flags. Correct guesses: ${correctGuessCount}/${guessCount}`
+      );
       return;
     }
 
