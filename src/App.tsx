@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import GithubSVG from "./components/GithubSVG.tsx";
 
 const BASE_URL = "https://flagcdn.com/";
 
@@ -181,6 +182,15 @@ function App() {
       <button onClick={handleGuess} disabled={isAnswerRevealed}>
         GUESS
       </button>
+      <footer className="github-links">
+        <a href="https://github.com/Renx24/flag-guesser" target="_blank">
+          Project repo
+        </a>
+        <a href="https://github.com/Renx24" target="_blank">
+          <GithubSVG />
+          Renx24
+        </a>
+      </footer>
     </div>
   );
 }

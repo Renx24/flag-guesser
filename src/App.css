@@ -66,3 +66,48 @@ button {
     padding: 2px 10px;
     margin-top: 10px;
 }
+
+.github-links {
+    font-family: "Inter", sans-serif;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 15px 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    position:absolute;
+    bottom: 0;
+  }
+  
+  .github-links a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .github-links a:link, .github-links a:visited {
+    background-color: white;
+  }
+  
+  .github-links a:hover, .github-links a:active {
+    background-color: #5FB8BC;
+    color: white;
+  }
+  
+  .github-links a svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease-in-out, fill 0.3s ease-in-out;
+  }
+  
+  .github-links a:hover svg {
+    transform: rotate(360deg) scale(1.2);
+    fill: white;
+  }
