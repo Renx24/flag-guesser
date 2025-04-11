@@ -1,22 +1,27 @@
-name: Deploy to DigitalOcean
+name: Deploy Project
 
 on:
   push:
-    branches: [main] # or 'master' depending on your repo
+    branches: [main]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Connect and deploy to Droplet
-        uses: appleboy/ssh-action@master
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install deps and build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Upload to server
+        uses: appleboy/scp-action@master
         with:
-          host: 167.99.222.76
+          host: ${{ secrets.DROPLET_HOST }}
           username: rene
           key: ${{ secrets.DROPLET_SSH_KEY }}
-          script: |
-            cd /var/www/renem.me/flag-guesser
-            git pull origin main
-            npm install
-            npm run build
+          source: "dist/*"
+          target: "/var/www/renem.me/flag-guesser"
